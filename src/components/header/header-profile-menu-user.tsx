@@ -2,7 +2,7 @@ import { Menu } from "@cora-ui/react"
 import NextLink from "next/link"
 import { ShoppingBag, UserRound } from "lucide-react"
 
-export const HeaderAccountMenuUser = () => {
+export const HeaderProfileMenuUser = () => {
 	return (
 		<>
 			<Menu.LinkItem

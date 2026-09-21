@@ -1,30 +1,27 @@
 "use client"
 
-import { ATTRIBUTE_NAME_MAX_LENGTH } from "@/constants"
+import { UNIT_SHORT_NAME_MAX_LENGTH } from "@/constants"
 
 import { Field } from "@cora-ui/react"
 
-type AttributesNameFieldProps = {
-	autofocus?: boolean
-	name: string
-	onNameChange: (name: string) => void
+type UnitsShortNameFieldProps = {
+	shortName: string
+	onShortNameChange: (shortName: string) => void
 }
 
-export const AttributesNameField = (props: AttributesNameFieldProps) => {
+export const UnitsShortNameField = (props: UnitsShortNameFieldProps) => {
 	const {
-		autofocus,
-		name,
-		onNameChange,
+		shortName,
+		onShortNameChange,
 	} = props
 
 	return (
 		<Field.Control
-			autoFocus={autofocus}
 			autoComplete="off"
-			placeholder="Наименование"
-			maxLength={ATTRIBUTE_NAME_MAX_LENGTH}
-			value={name}
-			onValueChange={onNameChange}
+			placeholder="Краткое наименование"
+			maxLength={UNIT_SHORT_NAME_MAX_LENGTH}
+			value={shortName}
+			onValueChange={onShortNameChange}
 		/>
 	)
 }

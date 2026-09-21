@@ -16,9 +16,9 @@ import { PHONE_NUMBER_MAX_LENGTH } from "@/constants"
 
 import { Button, Dialog, Field, Form, Spinner } from "@cora-ui/react"
 
-import { HeaderAccountLoginAuthOtp } from "./header-account-login-auth-otp"
+import { HeaderLoginAuthOtp } from "./header-login-auth-otp"
 
-export const HeaderAccountLoginAuth = () => {
+export const HeaderLoginAuth = () => {
 	const [phoneNumber, setPhoneNumber] = useState("")
 	const [pending, startTransition] = useTransition()
 	const [errors, setErrors] = useState<Errors>({})
@@ -110,7 +110,7 @@ export const HeaderAccountLoginAuth = () => {
 						<Dialog.Title>Введите код из SMS</Dialog.Title>
 
 						{!!nextAvailableDate && (
-							<HeaderAccountLoginAuthOtp
+							<HeaderLoginAuthOtp
 								phoneNumber={phoneNumber}
 								nextAvailableDate={nextAvailableDate}
 							/>

@@ -2,17 +2,15 @@ import type { User } from "@/types"
 
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import { phoneNumber, customSession } from "better-auth/plugins"
+import { anonymous, phoneNumber, customSession } from "better-auth/plugins"
 import { passkey } from "@better-auth/passkey"
 import { nextCookies } from "better-auth/next-js"
 import { db, schema } from "@/db"
+import { generateRandomEmail } from "./utils"
 
 import { AUTH_OTP_LENGTH } from "@/constants"
 
-export type Auth = typeof auth
-
-const getTempEmail = () => `${crypto.randomUUID()}@temp.local`
-const getTempName = () => ""
+export type AuthInstance = typeof auth
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -23,10 +21,7 @@ export const auth = betterAuth({
 		user: {
 			create: {
 				before: async (user) => ({
-					data: {
-						...user,
-						email: "",
-					},
+					data: { ...user, name: "" },
 				}),
 			},
 		},
@@ -51,24 +46,34 @@ export const auth = betterAuth({
 		},
 	},
 	plugins: [
+		anonymous({
+			generateRandomEmail,
+			onLinkAccount: async (data) => {
+				const { anonymousUser, newUser } = data
+
+				console.log(anonymousUser, newUser)
+				//Implement migrate anonymous user -> new user
+			}
+		}),
 		phoneNumber({
 			otpLength: AUTH_OTP_LENGTH,
 			sendOTP: (data) => {
-				console.log("sendOTP", data.code)
+				const { phoneNumber, code } = data
+
+				console.log(phoneNumber, code)
 				// Implement sending OTP code via SMS
 			},
 			signUpOnVerification: {
-				getTempEmail,
-				getTempName,
+				getTempEmail: generateRandomEmail,
 			},
 		}),
 		passkey(),
 		customSession(async (session) => {
-			const { id, role } = session.user as User
+			const { id, role, isAnonymous } = session.user as User
 
 			return {
-				session: session.session,
-				user: { id, role },
+				...session,
+				user: { id, role, isAnonymous },
 			}
 		}),
 		nextCookies(),

@@ -7,12 +7,12 @@ import { createOption } from "../../utils"
 import { Button } from "@cora-ui/react"
 import { Plus } from "lucide-react"
 
-type AttributeOptionCreateProps = {
+type AttributesOptionCreateProps = {
 	options: AttributeOptionItem[]
 	onOptionsChange: (options: AttributeOptionItem[]) => void
 }
 
-export const AttributeOptionCreate = (props: AttributeOptionCreateProps) => {
+export const AttributesOptionCreate = (props: AttributesOptionCreateProps) => {
 	const { options, onOptionsChange } = props
 
 	const handleOptionCreate = () => {

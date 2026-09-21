@@ -10,11 +10,11 @@ import { afterAuthAction } from "./actions"
 
 import { Button, Spinner } from "@cora-ui/react"
 
-type HeaderAccountLoginAuthOtpPasskeyProps = {
+type HeaderLoginAuthOtpPasskeyProps = {
 	phoneNumber: string
 }
 
-export const HeaderAccountLoginAuthOtpPasskey = (props: HeaderAccountLoginAuthOtpPasskeyProps) => {
+export const HeaderLoginAuthOtpPasskey = (props: HeaderLoginAuthOtpPasskeyProps) => {
 	const { phoneNumber } = props
 
 	const [pending, startTransition] = useTransition()

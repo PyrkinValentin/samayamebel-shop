@@ -1,30 +1,35 @@
 "use client"
 
-import { UNIT_SHORT_NAME_MAX_LENGTH } from "@/constants"
+import type { RefObject } from "react"
+
+import { UNIT_NAME_MAX_LENGTH } from "@/constants"
 
 import { Field } from "@cora-ui/react"
 
-type UnitsShortNameFieldProps = {
-	autofocus?: boolean
-	shortName: string
-	onShortNameChange: (shortName: string) => void
+type UnitsNameFieldProps = {
+	ref?: RefObject<HTMLInputElement | null>
+	autoFocus?: boolean
+	name: string
+	onNameChange: (name: string) => void
 }
 
-export const UnitsShortNameField = (props: UnitsShortNameFieldProps) => {
+export const UnitsNameField = (props: UnitsNameFieldProps) => {
 	const {
-		autofocus,
-		shortName,
-		onShortNameChange,
+		ref,
+		autoFocus,
+		name,
+		onNameChange,
 	} = props
 
 	return (
 		<Field.Control
-			autoFocus={autofocus}
+			ref={ref}
+			autoFocus={autoFocus}
 			autoComplete="off"
-			placeholder="Например: см"
-			maxLength={UNIT_SHORT_NAME_MAX_LENGTH}
-			value={shortName}
-			onValueChange={onShortNameChange}
+			placeholder="Наименование"
+			maxLength={UNIT_NAME_MAX_LENGTH}
+			value={name}
+			onValueChange={onNameChange}
 		/>
 	)
 }

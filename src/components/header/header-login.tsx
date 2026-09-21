@@ -6,10 +6,10 @@ import NextLink from "next/link"
 import { Button, Dialog, Link, Separator } from "@cora-ui/react"
 import { UserRound } from "lucide-react"
 
-import { HeaderAccountLoginAuth } from "./header-account-login-auth"
-import { HeaderAccountLoginPasskey } from "./header-account-login-passkey"
+import { HeaderLoginAuth } from "./header-login-auth"
+import { HeaderLoginPasskey } from "./header-login-passkey"
 
-export const HeaderAccountLogin = () => {
+export const HeaderLogin = () => {
 	const [open, setOpen] = useLoginDialogState()
 
 	return (
@@ -40,7 +40,7 @@ export const HeaderAccountLogin = () => {
 						Войдите, чтобы сохранять избранное на любом устройстве и копить бонусы за покупки
 					</Dialog.Description>
 
-					<HeaderAccountLoginAuth/>
+					<HeaderLoginAuth/>
 
 					<span className="mt-4 text-xs text-muted text-center text-pretty">
 						Нажимая &laquo;Получить код&raquo;, вы соглашаетесь с <Link render={<NextLink href="/privacy"/>}
@@ -52,7 +52,7 @@ export const HeaderAccountLogin = () => {
 						<Separator className="shrink"/> или <Separator className="shrink"/>
 					</span>
 
-					<HeaderAccountLoginPasskey/>
+					<HeaderLoginPasskey/>
 				</Dialog.Popup>
 			</Dialog.Portal>
 		</Dialog.Root>

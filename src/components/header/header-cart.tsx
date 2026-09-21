@@ -9,6 +9,8 @@ type HeaderCartProps = {
 export const HeaderCart = (props: HeaderCartProps) => {
 	const { count } = props
 
+	const hasCart = count > 0
+
 	return (
 		<Badge.Root>
 			<Button
@@ -22,7 +24,7 @@ export const HeaderCart = (props: HeaderCartProps) => {
 			</Button>
 
 			<Badge.Indicator
-				invisible={count === 0}
+				invisible={!hasCart}
 				size="sm"
 				className="bg-foreground text-background"
 			>

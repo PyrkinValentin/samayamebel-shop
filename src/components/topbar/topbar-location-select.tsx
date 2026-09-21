@@ -2,12 +2,20 @@
 
 import type { LocationItem } from "./types"
 
+import { useMemo, useTransition } from "react"
+
+import { combineErrorsSchema, validateSchema } from "@/zod"
+import { toast } from "@/components/toast"
+
+import { updateLocationSchema } from "./schemas"
+import { updateLocationAction } from "./actions"
+
 import { Select } from "@cora-ui/react"
 
 type TopbarLocationSelectProps = {
 	location?: LocationItem
 	locations: LocationItem[]
-	onLocationChange: (locationId: string | null) => void
+	onLocationChange: (location?: LocationItem) => void
 }
 
 export const TopbarLocationSelect = (props: TopbarLocationSelectProps) => {
@@ -17,23 +25,48 @@ export const TopbarLocationSelect = (props: TopbarLocationSelectProps) => {
 		onLocationChange,
 	} = props
 
+	const [, startTransition] = useTransition()
+
 	const hasLocations = locations.length > 0
+
+	const items = useMemo(() => {
+		return locations.map((location) => ({ value: location.id, label: location.name }))
+	}, [locations])
+
+	const handleLocationChange = (id: string | null) => {
+		const { errors, values } = validateSchema(updateLocationSchema, { id })
+
+		if (errors) {
+			toast.error(combineErrorsSchema(errors))
+
+			return
+		}
+
+		const location = locations.find((location) => location.id === id)
+
+		startTransition(async () => {
+			onLocationChange(location)
+
+			try {
+				const { error } = await updateLocationAction(values)
+
+				if (error) {
+					toast.error(combineErrorsSchema(error.errors))
+				}
+			} catch {
+				toast.error()
+			}
+		})
+	}
 
 	return (
 		<Select.Root
 			value={location?.id ?? null}
-			onValueChange={onLocationChange}
+			onValueChange={handleLocationChange}
+			items={items}
 		>
 			<Select.Trigger className="mt-6">
-				<Select.Value placeholder="Выберите населенный пункт">
-					{location
-						? (locationId: string | null) => locationId
-							? locations.find((location) => location.id === locationId)?.name
-							: null
-						: undefined
-					}
-				</Select.Value>
-
+				<Select.Value placeholder="Выберите населенный пункт"/>
 				<Select.Icon/>
 			</Select.Trigger>
 
@@ -41,13 +74,7 @@ export const TopbarLocationSelect = (props: TopbarLocationSelectProps) => {
 				<Select.Positioner>
 					<Select.Popup>
 						<Select.List>
-							{!hasLocations && (
-								<span className="px-2 py-2 text-sm text-muted">
-									Список пуст
-								</span>
-							)}
-
-							{locations.map((location) => (
+							{hasLocations ? locations.map((location) => (
 								<Select.Item
 									key={location.id}
 									value={location.id}
@@ -55,7 +82,11 @@ export const TopbarLocationSelect = (props: TopbarLocationSelectProps) => {
 									<Select.ItemText>{location.name}</Select.ItemText>
 									<Select.ItemIndicator/>
 								</Select.Item>
-							))}
+							)) : (
+								<span className="px-2 py-2 text-sm text-muted">
+									Список пуст
+								</span>
+							)}
 						</Select.List>
 					</Select.Popup>
 				</Select.Positioner>

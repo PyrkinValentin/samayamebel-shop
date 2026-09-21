@@ -1,2 +1,2 @@
-export { db } from "./db.config"
+export { db } from "./db"
 export { schema } from "./schema"

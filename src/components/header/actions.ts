@@ -3,11 +3,13 @@
 import { APIError } from "better-auth"
 
 import { headers } from "next/headers"
-import { formatPhoneNumber, validateSchema } from "@/utils"
-import { addSeconds, isAfter } from "date-fns"
-import { Verification } from "@/services"
+import { formatPhoneNumber } from "@/utils"
+import { validateSchema } from "@/zod"
+import { addSeconds, isAfter, subSeconds } from "date-fns"
 import { calculateWaitSeconds } from "./utils"
 import { auth } from "@/auth"
+import { db, schema } from "@/db"
+import { and, count, eq, gt, max } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -15,8 +17,8 @@ import { authSchema, otpSchema } from "./schemas"
 
 import { AUTH_MAX_ATTEMPTS } from "@/constants"
 
-export const authAction = async (values: unknown) => {
-	const { errors, data } = validateSchema(authSchema, values)
+export const authAction = async (data: unknown) => {
+	const { errors, values } = validateSchema(authSchema, data)
 
 	if (errors) {
 		return {
@@ -24,7 +26,7 @@ export const authAction = async (values: unknown) => {
 		}
 	}
 
-	const { phoneNumber } = data
+	const { phoneNumber } = values
 
 	const formattedPhoneNumber = formatPhoneNumber(phoneNumber, "E.164")
 
@@ -36,9 +38,15 @@ export const authAction = async (values: unknown) => {
 		}
 	}
 
-	const stats = await Verification.getCountByPhoneNumber({
-		phoneNumber: formattedPhoneNumber,
-	})
+	const [stats] = await db
+		.select({ count: count(), createdAt: max(schema.verification.createdAt) })
+		.from(schema.verification)
+		.where(
+			and(
+				gt(schema.verification.createdAt, subSeconds(new Date(), 86400)),
+				eq(schema.verification.identifier, formattedPhoneNumber),
+			)
+		)
 
 	if (stats.count >= AUTH_MAX_ATTEMPTS) {
 		return {
@@ -83,8 +91,8 @@ export const authAction = async (values: unknown) => {
 	}
 }
 
-export const OTPAction = async (values: unknown) => {
-	const { errors, data } = validateSchema(otpSchema, values)
+export const OTPAction = async (data: unknown) => {
+	const { errors, values } = validateSchema(otpSchema, data)
 
 	if (errors) {
 		return {
@@ -92,7 +100,7 @@ export const OTPAction = async (values: unknown) => {
 		}
 	}
 
-	const { phoneNumber, code } = data
+	const { phoneNumber, code } = values
 
 	const formattedPhoneNumber = formatPhoneNumber(phoneNumber, "E.164")
 

@@ -1,6 +1,11 @@
-import type { FormatNumberOptions, NumberFormat } from "libphonenumber-js"
+import type { CountryCode, FormatNumberOptions, NumberFormat } from "libphonenumber-js"
 
-import { parsePhoneNumberFromString } from "libphonenumber-js"
+import { AsYouType, parsePhoneNumberFromString } from "libphonenumber-js"
+
+type InputPhoneNumberOptions = CountryCode | {
+	defaultCountry?: CountryCode
+	defaultCallingCode?: string
+}
 
 export const formatPhoneNumber = (
 	value: string | undefined,
@@ -11,3 +16,11 @@ export const formatPhoneNumber = (
 		? parsePhoneNumberFromString(value)?.format(format, options)
 		: undefined
 )
+
+export const inputPhoneNumber = (value: string, options?: InputPhoneNumberOptions) => {
+	return new AsYouType(options).input(
+		value
+			? `+${value.replace(/\D/g, "")}`
+			: ""
+	)
+}

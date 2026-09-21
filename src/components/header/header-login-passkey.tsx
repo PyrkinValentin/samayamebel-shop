@@ -11,7 +11,7 @@ import { afterAuthAction } from "./actions"
 import { Button, Spinner } from "@cora-ui/react"
 import { Fingerprint } from "lucide-react"
 
-export const HeaderAccountLoginPasskey = () => {
+export const HeaderLoginPasskey = () => {
 	const [pending, startTransition] = useTransition()
 
 	const handlePasskey = () => {

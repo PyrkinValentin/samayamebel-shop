@@ -18,14 +18,14 @@ import { AUTH_OTP_INPUTS, AUTH_OTP_LENGTH } from "@/constants"
 import { AlertDialog, Field, Form, OTPField, Spinner } from "@cora-ui/react"
 import { Fingerprint } from "lucide-react"
 
-import { HeaderAccountLoginAuthOtpPasskey } from "./header-account-login-auth-otp-passkey"
+import { HeaderLoginAuthOtpPasskey } from "./header-login-auth-otp-passkey"
 
-type AccountLoginAuthOtpProps = {
+type HeaderLoginAuthOtpProps = {
 	phoneNumber: string
 	nextAvailableDate: Date
 }
 
-export const HeaderAccountLoginAuthOtp = (props: AccountLoginAuthOtpProps) => {
+export const HeaderLoginAuthOtp = (props: HeaderLoginAuthOtpProps) => {
 	const {
 		phoneNumber,
 		nextAvailableDate,
@@ -138,7 +138,7 @@ export const HeaderAccountLoginAuthOtp = (props: AccountLoginAuthOtpProps) => {
 							</AlertDialog.Description>
 
 							<AlertDialog.Actions>
-								<HeaderAccountLoginAuthOtpPasskey phoneNumber={phoneNumber}/>
+								<HeaderLoginAuthOtpPasskey phoneNumber={phoneNumber}/>
 							</AlertDialog.Actions>
 						</AlertDialog.Popup>
 					</AlertDialog.Viewport>

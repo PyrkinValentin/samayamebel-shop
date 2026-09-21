@@ -1,0 +1,1 @@
+export const CALLBACK_STATUSES = ["pending", "processing", "completed", "failed"] as const

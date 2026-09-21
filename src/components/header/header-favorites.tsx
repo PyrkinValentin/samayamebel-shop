@@ -9,6 +9,8 @@ type HeaderFavoritesProps = {
 export const HeaderFavorites = (props: HeaderFavoritesProps) => {
 	const { count } = props
 
+	const hasFavorites = count > 0
+
 	return (
 		<Badge.Root>
 			<Button
@@ -22,7 +24,7 @@ export const HeaderFavorites = (props: HeaderFavoritesProps) => {
 			</Button>
 
 			<Badge.Indicator
-				invisible={count === 0}
+				invisible={!hasFavorites}
 				size="sm"
 				className="bg-foreground text-background"
 			>

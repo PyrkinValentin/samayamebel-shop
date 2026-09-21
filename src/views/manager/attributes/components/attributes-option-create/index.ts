@@ -1,1 +1,1 @@
-export { AttributeOptionCreate } from "./attribute-option-create"
+export { AttributesOptionCreate } from "./attributes-option-create"

@@ -1,3 +1,7 @@
+"use client"
+
+import useSWR from "swr"
+
 import { Chip, Menu } from "@cora-ui/react"
 import NextLink from "next/link"
 
@@ -17,19 +21,11 @@ import {
 	UsersRound,
 } from "lucide-react"
 
-type HeaderAccountMenuManagerProps = {
-	countPendingOrders: number
-	countPendingCallbacks: number
-}
+export const HeaderProfileMenuManager = () => {
+	const { data } = useSWR<{ totalCountOrders: number, totalCountCallbacks: number }>("/manager/api")
 
-export const HeaderAccountMenuManager = (props: HeaderAccountMenuManagerProps) => {
-	const {
-		countPendingOrders,
-		countPendingCallbacks,
-	} = props
-
-	const hasOrders = countPendingOrders > 0
-	const hasCallbacks = countPendingCallbacks > 0
+	const hasOrders = !!data?.totalCountOrders
+	const hasCallbacks = !!data?.totalCountCallbacks
 
 	return (
 		<>
@@ -45,10 +41,9 @@ export const HeaderAccountMenuManager = (props: HeaderAccountMenuManagerProps) =
 				render={<NextLink href="/manager/orders"/>}
 			>
 				<ShoppingBag/> Заказы
+
 				{hasOrders && (
-					<Chip className="ms-auto">
-						{countPendingOrders}
-					</Chip>
+					<Chip className="ms-auto">{data.totalCountOrders}</Chip>
 				)}
 			</Menu.LinkItem>
 
@@ -59,9 +54,7 @@ export const HeaderAccountMenuManager = (props: HeaderAccountMenuManagerProps) =
 				<Headset/> Поддержка
 
 				{hasCallbacks && (
-					<Chip className="ms-auto">
-						{countPendingCallbacks}
-					</Chip>
+					<Chip className="ms-auto">{data.totalCountCallbacks}</Chip>
 				)}
 			</Menu.LinkItem>
 

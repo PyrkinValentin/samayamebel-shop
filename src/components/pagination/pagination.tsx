@@ -1,18 +1,16 @@
 "use client"
 
 import type { PaginationRootChangeEventDetails } from "@cora-ui/react"
-import type { PaginationMetadata } from "@/types"
+import type { Pagination as PaginationType } from "@/types"
 
 import { usePathname, useRouter } from "next/navigation"
 
-import { createPageHref } from "@/utils"
+import { createPageHref } from "./utils"
 
 import { Pagination as CoraUIPagination } from "@cora-ui/react"
 import NextLink from "next/link"
 
-type PaginationProps = PaginationMetadata
-
-export const Pagination = (props: PaginationProps) => {
+export const Pagination = (props: PaginationType) => {
 	const { page, totalPages } = props
 
 	const pathname = usePathname()
@@ -48,7 +46,7 @@ export const Pagination = (props: PaginationProps) => {
 
 				{pages.map((page) => (
 					<CoraUIPagination.Item key={page}>
-						{typeof page === "number" ? (
+						{typeof page === "string" ? <CoraUIPagination.Ellipsis/> : (
 							<CoraUIPagination.Page
 								nativeButton={false}
 								page={page}
@@ -56,7 +54,7 @@ export const Pagination = (props: PaginationProps) => {
 									<NextLink href={createPageHref(pathname, page)}/>
 								}
 							/>
-						) : <CoraUIPagination.Ellipsis/>}
+						)}
 					</CoraUIPagination.Item>
 				))}
 

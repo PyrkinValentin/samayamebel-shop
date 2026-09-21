@@ -1,4 +1,4 @@
-import { Z, z } from "@/utils"
+import { Z, z } from "@/zod"
 
 export const updateLocationSchema = z.object({
 	id: Z.uuid,

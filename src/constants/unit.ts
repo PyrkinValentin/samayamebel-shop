@@ -1,0 +1,2 @@
+export const UNIT_SHORT_NAME_MAX_LENGTH = 20
+export const UNIT_NAME_MAX_LENGTH = 100

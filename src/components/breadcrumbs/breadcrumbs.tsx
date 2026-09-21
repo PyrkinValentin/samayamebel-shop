@@ -1,4 +1,4 @@
-import type { Breadcrumb } from "@/types"
+import type { Breadcrumb } from "./types"
 
 import { Fragment } from "react"
 import { Breadcrumbs as CoraUIBreadcrumbs } from "@cora-ui/react"
@@ -19,7 +19,7 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
 		<CoraUIBreadcrumbs.Root>
 			<CoraUIBreadcrumbs.List>
 				{breadcrumbs.map((breadcrumb) => (
-					<Fragment key={breadcrumb.id}>
+					<Fragment key={breadcrumb.href}>
 						<CoraUIBreadcrumbs.Item className="whitespace-nowrap">
 							{!breadcrumb.last ? (
 								<CoraUIBreadcrumbs.Link
@@ -30,7 +30,9 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
 									{breadcrumb.name}
 								</CoraUIBreadcrumbs.Link>
 							) : (
-								<CoraUIBreadcrumbs.Page>{breadcrumb.name}</CoraUIBreadcrumbs.Page>
+								<CoraUIBreadcrumbs.Page>
+									{breadcrumb.name}
+								</CoraUIBreadcrumbs.Page>
 							)}
 						</CoraUIBreadcrumbs.Item>
 

@@ -1,4 +1,4 @@
-import { Z, z } from "@/utils"
+import { Z, z } from "@/zod"
 
 export const authSchema = z.object({
 	phoneNumber: Z.phoneNumber,

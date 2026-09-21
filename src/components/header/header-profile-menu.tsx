@@ -3,15 +3,15 @@ import type { UserItem } from "./types"
 import { Button, Menu, ScrollArea } from "@cora-ui/react"
 import { UserRound } from "lucide-react"
 
-import { HeaderAccountMenuUser } from "./header-account-menu-user"
-import { HeaderAccountMenuManager } from "./header-account-menu-manager"
-import { HeaderAccountMenuLogout } from "./header-account-menu-logout"
+import { HeaderProfileMenuUser } from "./header-profile-menu-user"
+import { HeaderProfileMenuManager } from "./header-profile-menu-manager"
+import { HeaderProfileMenuLogout } from "./header-profile-menu-logout"
 
-type HeaderAccountProps = {
+type HeaderProfileMenuProps = {
 	user: UserItem
 }
 
-export const HeaderAccountMenu = (props: HeaderAccountProps) => {
+export const HeaderProfileMenu = (props: HeaderProfileMenuProps) => {
 	const { user } = props
 
 	return (
@@ -40,16 +40,10 @@ export const HeaderAccountMenu = (props: HeaderAccountProps) => {
 										Личный кабинет
 									</span>
 
-									{user.role === "user" && <HeaderAccountMenuUser/>}
+									{user.role === "user" && <HeaderProfileMenuUser/>}
+									{user.role === "manager" && <HeaderProfileMenuManager/>}
 
-									{user.role === "manager" && (
-										<HeaderAccountMenuManager
-											countPendingOrders={countPendingOrders}
-											countPendingCallbacks={countPendingCallbacks}
-										/>
-									)}
-
-									<HeaderAccountMenuLogout/>
+									<HeaderProfileMenuLogout/>
 								</ScrollArea.Content>
 							</ScrollArea.Viewport>
 

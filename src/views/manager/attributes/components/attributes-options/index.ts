@@ -1,0 +1,1 @@
+export { AttributesOptions } from "./attributes-options"

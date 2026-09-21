@@ -1,39 +1,39 @@
-import { mysqlTable, varchar, timestamp, mysqlEnum, boolean, int } from "drizzle-orm/mysql-core"
+import { mysqlTable, varchar, timestamp, mysqlEnum, boolean, text } from "drizzle-orm/mysql-core"
 import { relations } from "drizzle-orm"
 
-import { account } from "./account"
-import { session } from "./session"
+import { account, session } from "./auth"
 
-import { USER_PHONE_NUMBER_MAX_LENGTH, USER_NAME_MAX_LENGTH, USER_ROLES } from "@/constants"
+import {
+	ID_MAX_LENGTH,
+	PHONE_NUMBER_MAX_LENGTH,
+	USER_EMAIL_MAX_LENGTH,
+	USER_NAME_MAX_LENGTH,
+	USER_ROLES,
+} from "@/constants"
 
-export type CreateUserDB = typeof user.$inferInsert
-export type UserDB = typeof user.$inferSelect
+export type UserTable = typeof user.$inferSelect
 
 export const user = mysqlTable("users", {
-	id: varchar("id", { length: 36 })
+	id: varchar("id", { length: ID_MAX_LENGTH })
 		.primaryKey()
 		.$defaultFn(crypto.randomUUID),
 	role: mysqlEnum("role", USER_ROLES)
 		.notNull()
 		.default("user"),
-	phoneNumber: varchar("phone_number", { length: USER_PHONE_NUMBER_MAX_LENGTH })
-		.notNull()
-		.unique()
-		.$defaultFn(() => crypto.randomUUID().slice(0, USER_PHONE_NUMBER_MAX_LENGTH)),
+	phoneNumber: varchar("phone_number", { length: PHONE_NUMBER_MAX_LENGTH })
+		.unique(),
 	phoneNumberVerified: boolean("phone_number_verified")
 		.notNull()
 		.default(false),
-	email: varchar("email", { length: 255 })
-		.notNull(),
+	email: varchar("email", { length: USER_EMAIL_MAX_LENGTH })
+		.notNull()
+		.unique(),
 	emailVerified: boolean("email_verified")
 		.notNull()
 		.default(false),
 	name: varchar("name", { length: USER_NAME_MAX_LENGTH })
-		.notNull()
-		.default(""),
-	bonus: int("bonus", { unsigned: true })
-		.notNull()
-		.default(0),
+		.notNull(),
+	image: text("image"),
 	isAnonymous: boolean("is_anonymous")
 		.notNull()
 		.default(false),

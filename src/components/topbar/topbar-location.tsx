@@ -2,20 +2,15 @@
 
 import type { LocationItem } from "./types"
 
-import { useOptimistic, useState, useTransition } from "react"
-
-import { combineErrorsSchema, validateSchema } from "@/utils"
-import { toast } from "@/components/toast"
-
-import { updateLocationSchema } from "./schemas"
-import { updateLocationAction } from "./actions"
+import { useOptimistic, useState } from "react"
 
 import { Dialog } from "@cora-ui/react"
 import { ChevronDown, Navigation } from "lucide-react"
+
 import { TopbarLocationSelect } from "./topbar-location-select"
 
 type TopbarLocationProps = {
-	location: LocationItem | undefined
+	location?: LocationItem
 	locations: LocationItem[]
 }
 
@@ -25,42 +20,18 @@ export const TopbarLocation = (props: TopbarLocationProps) => {
 		locations,
 	} = props
 
-	const [selectLocationOpen, setSelectLocationOpen] = useState(false)
 	const [location, setLocation] = useOptimistic(locationProp)
-	const [, startLocationTransition] = useTransition()
+	const [open, setOpen] = useState(false)
 
-	const handleLocationChange = (id: string | null) => {
-		const { errors, data } = validateSchema(updateLocationSchema, { id })
-
-		if (errors) {
-			toast.error(combineErrorsSchema(errors))
-
-			return
-		}
-
-		const location = locations.find((location) => location.id === id)
-
-		setSelectLocationOpen(false)
-
-		startLocationTransition(async () => {
-			setLocation(location)
-
-			try {
-				const { error } = await updateLocationAction(data)
-
-				if (error) {
-					toast.error(error.message)
-				}
-			} catch {
-				toast.error()
-			}
-		})
+	const handleLocationChange = (location?: LocationItem) => {
+		setLocation(location)
+		setOpen(false)
 	}
 
 	return (
 		<Dialog.Root
-			open={selectLocationOpen}
-			onOpenChange={setSelectLocationOpen}
+			open={open}
+			onOpenChange={setOpen}
 		>
 			<Dialog.Trigger className="flex items-center gap-2 text-xs">
 				<Navigation

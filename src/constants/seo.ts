@@ -1,0 +1,2 @@
+export const SEO_TITLE_MAX_LENGTH = 50
+export const SEO_DESCRIPTION_MAX_LENGTH = 120
